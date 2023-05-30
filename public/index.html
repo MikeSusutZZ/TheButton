@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Button Example</title>
+  <style>
+    .clicked {
+      background-color: green;
+    }
+  </style>
+</head>
+<body>
+  <button id="button">Click me!</button>
+
+  <script>
+    const button = document.getElementById('button');
+
+    // Function to update button color on click
+    function updateButtonColor(isClicked) {
+      button.classList.toggle('clicked', isClicked);
+    }
+
+    // Function to fetch the current button state
+    function fetchButtonState() {
+      fetch('/api/button')
+        .then(response => response.json())
+        .then(data => {
+          updateButtonColor(data.isClicked);
+        })
+        .catch(error => {
+          console.error('Error fetching button state:', error);
+        });
+    }
+
+    // Function to handle button click
+    function handleButtonClick() {
+      fetch('/api/button', { method: 'POST' })
+        .then(() => {
+          fetchButtonState();
+        })
+        .catch(error => {
+          console.error('Error updating button state:', error);
+        });
+    }
+
+    // Add event listener for button click
+    button.addEventListener('click', handleButtonClick);
+
+    // Fetch the initial button state
+    fetchButtonState();
+  </script>
+</body>
+</html>
